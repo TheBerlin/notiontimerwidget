@@ -6,43 +6,43 @@
     <title>Dark Notion Timer</title>
     <style>
         :root {
-            --bg-color: #191919;      /* Notion Dark Background */
-            --card-bg: #202020;      /* Notion Dark Card */
-            --text-main: #FFFFFF;    /* Pure White for digits */
-            --text-dim: #9B9B9B;     /* Gray for labels */
-            --btn-bg: #2F2F2F;       /* Button color */
-            --btn-hover: #3F3F3F;    /* Button hover */
-            --accent: #eb5757;       /* Optional accent color for reset/focus */
+            --card-bg: #202020;      /* Matches Notion's block background */
+            --text-main: #FFFFFF;    /* Digits */
+            --text-dim: #9B9B9B;     /* Labels */
+            --btn-bg: #2F2F2F;       
+            --btn-hover: #3F3F3F;    
         }
 
-        body {
-            background-color: transparent; /* Allows Notion's bg to show through */
+        /* This removes the white background from the embed page */
+        html, body {
+            background-color: transparent !important;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Aligns card to top instead of center */
             height: 100vh;
-            margin: 0;
             font-family: 'Inter', -apple-system, sans-serif;
+            overflow: hidden; /* Prevents scrollbars */
             user-select: none;
         }
 
         .timer-card {
             background: var(--card-bg);
             width: 300px;
-            padding: 35px 20px;
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            padding: 25px 20px;
+            border-radius: 15px; /* Slightly sharper Notion-style corners */
             text-align: center;
             border: 1px solid rgba(255,255,255,0.05);
+            margin-top: 10px; /* Small gap from the top */
         }
 
         .display {
-            font-size: 4.8rem;
+            font-size: 4.5rem;
             font-weight: 800;
-            letter-spacing: -4px;
+            letter-spacing: -3px;
             color: var(--text-main);
-            margin-bottom: 2px;
-            font-variant-numeric: tabular-nums; /* Prevents digits from "jumping" */
+            font-variant-numeric: tabular-nums;
         }
 
         .label-input {
@@ -51,10 +51,10 @@
             text-align: center;
             font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             color: var(--text-dim);
-            width: 70%;
-            margin: 0 auto 30px auto;
+            width: 80%;
+            margin: 0 auto 20px auto;
             display: block;
             outline: none;
             border-bottom: 1px solid transparent;
@@ -71,7 +71,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         button {
@@ -79,44 +79,22 @@
             border: none;
             color: var(--text-main);
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
-            transition: background 0.2s ease, transform 0.1s active;
+            transition: background 0.2s ease;
         }
 
-        #start, #reset {
-            padding: 10px 22px;
-            font-size: 0.85rem;
-            min-width: 85px;
-        }
-
-        .adj-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        button:hover {
-            background: var(--btn-hover);
-        }
-
-        button:active {
-            transform: scale(0.96);
-        }
+        #start, #reset { padding: 8px 16px; font-size: 0.8rem; min-width: 75px; }
+        .adj-btn { width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; }
+        button:hover { background: var(--btn-hover); }
     </style>
 </head>
 <body>
 
     <div class="timer-card">
-        <div class="timer-face">
-            <div class="display" id="display">05:00</div>
-            <input type="text" class="label-input" id="label" value="Focus Session">
-        </div>
-
+        <div class="display" id="display">05:00</div>
+        <input type="text" class="label-input" id="label" value="Focus">
+        
         <div class="controls-row">
             <button class="adj-btn" id="minus">−</button>
             <button id="start">Start</button>
@@ -131,14 +109,19 @@
         const resetBtn = document.getElementById('reset');
         const labelInput = document.getElementById('label');
 
-        // --- 1. DATA PERSISTENCE ---
         const savedData = JSON.parse(localStorage.getItem('notionDarkTimer')) || {
             time: 300,
-            label: "Focus Session"
+            label: "Focus"
         };
 
         let timeLeft = savedData.time;
         let timerId = null;
+
+        function updateDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            display.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
 
         function saveData() {
             localStorage.setItem('notionDarkTimer', JSON.stringify({
@@ -147,28 +130,17 @@
             }));
         }
 
-        // --- 2. TIMER LOGIC ---
-        function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            display.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
         function toggleTimer() {
             if (timerId) {
                 stopTimer();
             } else {
                 if (timeLeft <= 0) return;
                 startBtn.textContent = 'Pause';
-                startBtn.style.color = '#eb5757'; // Visual indicator for active state
                 timerId = setInterval(() => {
                     timeLeft--;
                     updateDisplay();
                     if (timeLeft % 5 === 0) saveData();
-                    if (timeLeft <= 0) {
-                        stopTimer();
-                        alertTimerDone();
-                    }
+                    if (timeLeft <= 0) stopTimer();
                 }, 1000);
             }
         }
@@ -177,25 +149,16 @@
             clearInterval(timerId);
             timerId = null;
             startBtn.textContent = 'Start';
-            startBtn.style.color = 'var(--text-main)';
             saveData();
         }
 
-        function alertTimerDone() {
-            // Subtle flash effect or browser beep can go here
-            console.log("Timer finished!");
-        }
-
-        // --- 3. ACTIONS ---
         startBtn.addEventListener('click', toggleTimer);
-
         resetBtn.addEventListener('click', () => {
             stopTimer();
             let mins = Math.ceil(timeLeft / 60);
             if (mins < 1) mins = 1;
             timeLeft = mins * 60;
             updateDisplay();
-            saveData();
         });
 
         function adjust(amount) {
@@ -203,7 +166,6 @@
             if (timeLeft + amount >= 60) {
                 timeLeft += amount;
                 updateDisplay();
-                saveData();
             }
         }
 
@@ -211,7 +173,6 @@
         document.getElementById('minus').addEventListener('click', () => adjust(-60));
         labelInput.addEventListener('input', saveData);
 
-        // --- 4. INIT ---
         labelInput.value = savedData.label;
         updateDisplay();
     </script>
