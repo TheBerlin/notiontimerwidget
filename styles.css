@@ -1,8 +1,43 @@
+:root {
+    /* Light Mode (Default) */
+    --bg-page: #f7f7f7;
+    --bg-container: #EBEBEB;
+    --bg-button-primary: #232323;
+    --text-button-primary: #EBEBEB;
+    --bg-button-secondary: #ffffff;
+    --text-button-secondary: #333333;
+    --text-main: #232323;
+    --border-container: rgba(0, 0, 0, 0.05);
+    --progress-bg: rgba(35, 35, 35, 0.25);
+    --progress-active: rgba(35, 35, 35, 1.0);
+    --icon-color: rgba(35, 35, 35, 0.75);
+    --icon-hover: rgba(35, 35, 35, 1.0);
+    --bg-hover-secondary: rgba(35, 35, 35, 0.05);
+}
+
+body.dark-mode {
+    /* Dark Mode */
+    --bg-page: #191919;
+    --bg-container: #2F2F2F;
+    --bg-button-primary: #ffffff;
+    --text-button-primary: #2F2F2F;
+    --bg-button-secondary: #3F3F3F;
+    --text-button-secondary: #ffffff;
+    --text-main: #ffffff;
+    --border-container: rgba(255, 255, 255, 0.1);
+    --progress-bg: rgba(255, 255, 255, 0.1);
+    --progress-active: #ffffff;
+    --icon-color: rgba(255, 255, 255, 0.6);
+    --icon-hover: rgba(255, 255, 255, 1.0);
+    --bg-hover-secondary: rgba(255, 255, 255, 0.1);
+}
+
 body {
-    background-color: #f7f7f7;
+    background-color: var(--bg-page);
     font-family: "Inter", sans-serif;
     margin: 0;
     padding: 0;
+    transition: background-color 0.3s ease;
 }
 
 .hidden {
@@ -12,7 +47,7 @@ body {
 .main-container {
     display: flex;
     justify-content: center;
-    align-items: center; /* Center the widget on page */
+    align-items: center;
     min-height: 100vh;
     width: 100vw;
     box-sizing: border-box;
@@ -20,32 +55,30 @@ body {
 
 .timer-container {
     position: relative;
-    /* For absolute positioning of children */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* Align timer to the top */
     align-items: center;
     width: 100%;
     max-width: 320px;
     height: auto;
-    background: #EBEBEB;
+    background: var(--bg-container);
     border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-
-    padding: 20px; /* Pin time to top with 20px padding */
+    border: 1px solid var(--border-container);
+    padding: 20px;
     box-sizing: border-box;
     overflow: hidden;
     gap: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .settings-icon {
     scale: 1.2;
     position: absolute;
     top: 15px;
-    right: 20px; /* Move to right to avoid clashing with pinned time if needed */
+    right: 20px;
     cursor: pointer;
-    color: rgba(35, 35, 35, 0.75);
+    color: var(--icon-color);
     transition: color 0.2s ease, transform 0.2s ease;
     display: flex;
     align-items: center;
@@ -53,8 +86,8 @@ body {
 }
 
 .settings-icon:hover {
-    color: rgba(35, 35, 35, 1.0);
-    transform: rotate(90deg);
+    color: var(--icon-hover);
+    transform: scale(1.1);
 }
 
 .timer-display {
@@ -68,12 +101,12 @@ body {
 #timer-display-text {
     font-size: clamp(2rem, 15vw, 5rem);
     font-weight: 700;
-    color: rgba(35, 35, 35, 1.0);
+    color: var(--text-main);
     font-variant-numeric: tabular-nums;
     line-height: 1;
     cursor: pointer;
     border-bottom: 2px solid transparent;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, color 0.3s ease;
     padding: 0 8px;
     width: 100%;
     text-align: center;
@@ -85,7 +118,7 @@ body {
 
 #timer-display-text:focus {
     outline: none;
-    border-bottom-color: rgba(35, 35, 35, 0.3);
+    border-bottom-color: var(--icon-color);
 }
 
 .timer-controls {
@@ -98,9 +131,9 @@ body {
 }
 
 .timer-controls button {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: #333;
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-container);
+    color: var(--text-button-secondary);
     padding: 8px 16px;
     border-radius: 8px;
     font-size: 0.9rem;
@@ -113,45 +146,38 @@ body {
 }
 
 .timer-controls button:hover {
-    background: rgba(#EBEBEB, 1.0);
+    background: var(--bg-hover-secondary);
 }
 
 .timer-controls button#start-btn,
 .timer-controls button#pause-btn {
-    background: rgba(35, 35, 35, 1.0);
-    color: #EBEBEB;
+    background: var(--bg-button-primary);
+    color: var(--text-button-primary);
     border: none;
 }
 
 .timer-controls button#start-btn:hover,
 .timer-controls button#pause-btn:hover {
-    background: rgba(35, 35, 35, 0.75);
+    opacity: 0.8;
 }
 
 .timer-controls button#reset-btn:hover {
-    background: rgba(35, 35, 35, 0.05);
+    background: var(--bg-hover-secondary);
 }
 
 .icon-control {
     background: none !important;
     border: none !important;
     padding: 8px !important;
-    color: #888 !important;
+    color: var(--icon-color) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
 .icon-control:hover {
-    color: rgba(35, 35, 35, 1.0) !important;
-    background: rgba(35, 35, 35, 0.05) !important;
-}
-
-#time-divider {
-    color: rgba(35, 35, 35, 1.0);
-    display: inline-flex;
-    align-items: center;
-    transform: translateY(-0.07em);
+    color: var(--icon-hover) !important;
+    background: var(--bg-hover-secondary) !important;
 }
 
 .timer-progress-bar {
@@ -164,17 +190,14 @@ body {
     width: 100%;
     margin: 5px 15px;
     height: 0.5rem;
-    border: 1px solid black;
     border-radius: 16px;
-    border-color: transparent;
-    background-color: rgba(35, 35, 35, 0.25);
+    background-color: var(--progress-bg);
 }
 
 .timer-progress-bar-active {
     width: 100%;
     height: 0.5rem;
     border-radius: 16px;
-    background-color: rgba(35, 35, 35, 1.0);
-    /* Snappy, one-way transition (no bounce back) */
-    transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
+    background-color: var(--progress-active);
+    transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease; 
 }

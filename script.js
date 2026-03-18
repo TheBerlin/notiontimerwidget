@@ -8,6 +8,7 @@ let endTime = 0;          // absolute timestamp (ms) when timer should end
 let rafId = null;         // requestAnimationFrame handle
 let isRunning = false;
 let totalDuration = 0;    // reference for progress bar
+let theme = 'light';      // 'light' or 'dark'
 const progressBarActive = document.querySelector('.timer-progress-bar-active');
 
 // --- Persistence ---
@@ -16,7 +17,8 @@ function saveState() {
         currentTime,
         endTime,
         isRunning,
-        totalDuration
+        totalDuration,
+        theme
     }));
 }
 
@@ -29,6 +31,9 @@ function loadState() {
             endTime = state.endTime || 0;
             isRunning = state.isRunning || false;
             totalDuration = state.totalDuration || 0;
+            theme = state.theme || 'light';
+
+            applyTheme(theme);
 
             if (isRunning) {
                 const remaining = endTime - Date.now();
@@ -45,6 +50,9 @@ function loadState() {
         } catch (e) {
             console.error('Failed to load timer state:', e);
         }
+    } else {
+        // Apply default light theme if no saved state
+        applyTheme(theme);
     }
 }
 
@@ -179,7 +187,7 @@ function runLoop() {
         timerDisplayText.textContent =
             `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
-        // Update progress bar (only once per second for a 'ticking' wave feel)
+        // Update progress bar
         if (totalSecs !== lastSecond) {
             const progress = Math.min(100, Math.max(0, (remaining / totalDuration) * 100));
             progressBarActive.style.width = `${progress}%`;
@@ -251,6 +259,29 @@ removeTimeBtn.addEventListener('click', () => {
     }
     saveState();
 });
+
+// --- Theme Toggle ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const sunIcon = document.getElementById('theme-sun');
+const moonIcon = document.getElementById('theme-moon');
+
+themeToggleBtn.addEventListener('click', () => {
+    theme = (theme === 'light') ? 'dark' : 'light';
+    applyTheme(theme);
+    saveState();
+});
+
+function applyTheme(newTheme) {
+    if (newTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+    } else {
+        document.body.classList.remove('dark-mode');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+    }
+}
 
 // Initialize state
 loadState();
