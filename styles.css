@@ -12,9 +12,10 @@ body {
 .main-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: center; /* Center the widget on page */
+    min-height: 100vh;
     width: 100vw;
+    box-sizing: border-box;
 }
 
 .timer-container {
@@ -25,24 +26,24 @@ body {
     justify-content: flex-start;
     /* Align timer to the top */
     align-items: center;
-    width: 300px;
-    height: 300px;
-    max-width: 90vw;
-    max-height: 90vh;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
     background: #EBEBEB;
     border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.05);
 
-    padding: 75px 20px 20px 20px;
+    padding: 20px; /* Pin time to top with 20px padding */
     box-sizing: border-box;
     overflow: hidden;
+    gap: 8px;
 }
 
 .settings-icon {
-    scale: 1.5;
+    scale: 1.2;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 15px;
+    right: 20px; /* Move to right to avoid clashing with pinned time if needed */
     cursor: pointer;
     color: rgba(35, 35, 35, 0.75);
     transition: color 0.2s ease, transform 0.2s ease;
@@ -93,7 +94,7 @@ body {
     align-items: center;
     gap: 12px;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 .timer-controls button {
