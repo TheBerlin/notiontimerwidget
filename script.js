@@ -8,6 +8,42 @@ let endTime = 0;          // absolute timestamp (ms) when timer should end
 let rafId = null;         // requestAnimationFrame handle
 let isRunning = false;
 
+// --- Persistence ---
+function saveState() {
+    localStorage.setItem('notionTimerState', JSON.stringify({
+        currentTime,
+        endTime,
+        isRunning
+    }));
+}
+
+function loadState() {
+    const saved = localStorage.getItem('notionTimerState');
+    if (saved) {
+        try {
+            const state = JSON.parse(saved);
+            currentTime = state.currentTime || 0;
+            endTime = state.endTime || 0;
+            isRunning = state.isRunning || false;
+
+            if (isRunning) {
+                const remaining = endTime - Date.now();
+                if (remaining > 0) {
+                    startBtn.classList.add('hidden');
+                    pauseBtn.classList.remove('hidden');
+                    runLoop();
+                } else {
+                    timeIsUp();
+                }
+            } else {
+                updateDisplay(currentTime);
+            }
+        } catch (e) {
+            console.error('Failed to load timer state:', e);
+        }
+    }
+}
+
 // --- Timer display element ---
 let timerDisplayText = document.getElementById('timer-display-text');
 timerDisplayText.addEventListener('click', makeEditable);
@@ -56,6 +92,7 @@ function applyTime() {
 
     // Save the time in milliseconds
     currentTime = (mins * 60 + secs) * 1000;
+    saveState();
 }
 
 // Reset
@@ -70,6 +107,7 @@ function resetTimer() {
     timerDisplayText.textContent = '00:00';
     startBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
+    saveState();
 }
 
 // Start
@@ -87,6 +125,7 @@ function startTimer() {
     pauseBtn.classList.remove('hidden');
 
     runLoop();
+    saveState();
 }
 
 // Pause / Resume
@@ -106,6 +145,7 @@ pauseBtn.addEventListener('click', () => {
         pauseBtn.classList.remove('hidden');
         runLoop();
     }
+    saveState();
 });
 
 // Core countdown loop (timestamp-based)
@@ -145,7 +185,7 @@ function timeIsUp() {
     timerDisplayText.textContent = '00:00';
     startBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
-
+    saveState();
 }
 
 // Add / Remove one minute
@@ -168,6 +208,7 @@ addTimeBtn.addEventListener('click', () => {
         currentTime = Math.min(currentTime + ONE_MINUTE, 59 * 60000 + 59000);
         updateDisplay(currentTime);
     }
+    saveState();
 });
 
 removeTimeBtn.addEventListener('click', () => {
@@ -182,7 +223,11 @@ removeTimeBtn.addEventListener('click', () => {
         currentTime = Math.max(0, currentTime - ONE_MINUTE);
         updateDisplay(currentTime);
     }
+    saveState();
 });
+
+// Initialize state
+loadState();
 
 // function updateDisplay() {
 //     let mins = Math.floor(timeLeft / 60);
