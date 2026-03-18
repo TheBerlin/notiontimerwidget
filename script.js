@@ -115,7 +115,12 @@ let startBtn = document.getElementById('start-btn');
 startBtn.addEventListener('click', startTimer);
 
 function startTimer() {
-    if (currentTime <= 0 || isRunning) return;
+    if (isRunning) return;
+
+    if (currentTime <= 0) {
+        currentTime = 60 * 1000; // Default to 1 minute
+        updateDisplay(currentTime);
+    }
 
     // Calculate the absolute end timestamp
     endTime = Date.now() + currentTime;
