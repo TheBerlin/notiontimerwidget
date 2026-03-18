@@ -262,8 +262,6 @@ removeTimeBtn.addEventListener('click', () => {
 
 // --- Theme Toggle ---
 const themeToggleBtn = document.getElementById('theme-toggle');
-const sunIcon = document.getElementById('theme-sun');
-const moonIcon = document.getElementById('theme-moon');
 
 themeToggleBtn.addEventListener('click', () => {
     theme = (theme === 'light') ? 'dark' : 'light';
@@ -274,12 +272,8 @@ themeToggleBtn.addEventListener('click', () => {
 function applyTheme(newTheme) {
     if (newTheme === 'dark') {
         document.body.classList.add('dark-mode');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
     } else {
         document.body.classList.remove('dark-mode');
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
     }
 }
 
