@@ -88,6 +88,19 @@ body {
     z-index: 10;
 }
 
+.settings-icon svg {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-icon svg.hidden {
+    display: block !important; /* Force block to allow opacity transition */
+    opacity: 0;
+    transform: scale(0.5) rotate(-20deg);
+    pointer-events: none;
+    visibility: hidden;
+}
+
 .settings-icon:hover {
     color: var(--icon-hover);
     transform: scale(1.2);
