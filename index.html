@@ -1,180 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Notion Timer</title>
-    <style>
-        :root {
-            --card-bg: #202020;      /* Matches Notion's block background */
-            --text-main: #FFFFFF;    /* Digits */
-            --text-dim: #9B9B9B;     /* Labels */
-            --btn-bg: #2F2F2F;       
-            --btn-hover: #3F3F3F;    
-        }
-
-        /* This removes the white background from the embed page */
-        html, body {
-            background-color: #191919 !important;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Aligns card to top instead of center */
-            height: 100vh;
-            font-family: 'Inter', -apple-system, sans-serif;
-            overflow: hidden; /* Prevents scrollbars */
-            user-select: none;
-        }
-
-        .timer-card {
-            background: var(--card-bg);
-            width: 300px;
-            padding: 25px 20px;
-            border-radius: 15px; /* Slightly sharper Notion-style corners */
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-top: 10px; /* Small gap from the top */
-        }
-
-        .display {
-            font-size: 4.5rem;
-            font-weight: 800;
-            letter-spacing: -3px;
-            color: var(--text-main);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .label-input {
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-dim);
-            width: 80%;
-            margin: 0 auto 20px auto;
-            display: block;
-            outline: none;
-            border-bottom: 1px solid transparent;
-            padding-bottom: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .label-input:focus {
-            color: var(--text-main);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .controls-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        button {
-            background: var(--btn-bg);
-            border: none;
-            color: var(--text-main);
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background 0.2s ease;
-        }
-
-        #start, #reset { padding: 8px 16px; font-size: 0.8rem; min-width: 75px; }
-        .adj-btn { width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; }
-        button:hover { background: var(--btn-hover); }
-    </style>
+    <title>Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
 </head>
-<body>
 
-    <div class="timer-card">
-        <div class="display" id="display">05:00</div>
-        <input type="text" class="label-input" id="label" value="Focus">
-        
-        <div class="controls-row">
-            <button class="adj-btn" id="minus">−</button>
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
-            <button class="adj-btn" id="plus">+</button>
+<body>
+    <div class="main-container">
+        <div class="timer-container">
+            <div class="settings-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+            </div>
+            <div class="timer-display">
+                <span id="timer-display-text">00:00</span>
+            </div>
+            <div class="timer-progress-bar">
+                <div class="timer-progress-bar-fill">
+                    <div class="timer-progress-bar-active"></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="timer-controls">
+                <button id="remove-time-btn" class="icon-control" title="Remove 1 minute">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+                <button id="start-btn">Start</button>
+                <button id="pause-btn" class="hidden">Pause</button>
+                <button id="reset-btn">Reset</button>
+                <button id="add-time-btn" class="icon-control" title="Add 1 minute">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
-
-    <script>
-        const display = document.getElementById('display');
-        const startBtn = document.getElementById('start');
-        const resetBtn = document.getElementById('reset');
-        const labelInput = document.getElementById('label');
-
-        const savedData = JSON.parse(localStorage.getItem('notionDarkTimer')) || {
-            time: 300,
-            label: "Focus"
-        };
-
-        let timeLeft = savedData.time;
-        let timerId = null;
-
-        function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            display.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function saveData() {
-            localStorage.setItem('notionDarkTimer', JSON.stringify({
-                time: timeLeft,
-                label: labelInput.value
-            }));
-        }
-
-        function toggleTimer() {
-            if (timerId) {
-                stopTimer();
-            } else {
-                if (timeLeft <= 0) return;
-                startBtn.textContent = 'Pause';
-                timerId = setInterval(() => {
-                    timeLeft--;
-                    updateDisplay();
-                    if (timeLeft % 5 === 0) saveData();
-                    if (timeLeft <= 0) stopTimer();
-                }, 1000);
-            }
-        }
-
-        function stopTimer() {
-            clearInterval(timerId);
-            timerId = null;
-            startBtn.textContent = 'Start';
-            saveData();
-        }
-
-        startBtn.addEventListener('click', toggleTimer);
-        resetBtn.addEventListener('click', () => {
-            stopTimer();
-            let mins = Math.ceil(timeLeft / 60);
-            if (mins < 1) mins = 1;
-            timeLeft = mins * 60;
-            updateDisplay();
-        });
-
-        function adjust(amount) {
-            stopTimer();
-            if (timeLeft + amount >= 60) {
-                timeLeft += amount;
-                updateDisplay();
-            }
-        }
-
-        document.getElementById('plus').addEventListener('click', () => adjust(60));
-        document.getElementById('minus').addEventListener('click', () => adjust(-60));
-        labelInput.addEventListener('input', saveData);
-
-        labelInput.value = savedData.label;
-        updateDisplay();
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>

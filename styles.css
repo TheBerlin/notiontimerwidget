@@ -1,0 +1,180 @@
+body {
+    background-color: #f7f7f7;
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.timer-container {
+    position: relative;
+    /* For absolute positioning of children */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Align timer to the top */
+    align-items: center;
+    width: 300px;
+    height: 300px;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #EBEBEB;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    padding: 75px 20px 20px 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.settings-icon {
+    scale: 1.5;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    color: rgba(35, 35, 35, 0.75);
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-icon:hover {
+    color: rgba(35, 35, 35, 1.0);
+    transform: rotate(90deg);
+}
+
+.timer-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+}
+
+#timer-display-text {
+    font-size: clamp(2rem, 15vw, 5rem);
+    font-weight: 700;
+    color: rgba(35, 35, 35, 1.0);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease;
+    padding: 0 8px;
+    width: 100%;
+    text-align: center;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+#timer-display-text:focus {
+    outline: none;
+    border-bottom-color: rgba(35, 35, 35, 0.3);
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.timer-controls button {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-controls button:hover {
+    background: rgba(#EBEBEB, 1.0);
+}
+
+.timer-controls button#start-btn,
+.timer-controls button#pause-btn {
+    background: rgba(35, 35, 35, 1.0);
+    color: #EBEBEB;
+    border: none;
+}
+
+.timer-controls button#start-btn:hover,
+.timer-controls button#pause-btn:hover {
+    background: rgba(35, 35, 35, 0.75);
+}
+
+.timer-controls button#reset-btn:hover {
+    background: rgba(35, 35, 35, 0.05);
+}
+
+.icon-control {
+    background: none !important;
+    border: none !important;
+    padding: 8px !important;
+    color: #888 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.icon-control:hover {
+    color: rgba(35, 35, 35, 1.0) !important;
+    background: rgba(35, 35, 35, 0.05) !important;
+}
+
+#time-divider {
+    color: rgba(35, 35, 35, 1.0);
+    display: inline-flex;
+    align-items: center;
+    transform: translateY(-0.07em);
+}
+
+.timer-progress-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.timer-progress-bar-fill {
+    width: 100%;
+    margin: 5px 15px;
+    height: 0.5rem;
+    border: 1px solid black;
+    border-radius: 16px;
+    border-color: transparent;
+    background-color: rgba(35, 35, 35, 0.25);
+}
+
+.timer-progress-bar-active {
+    width: 100%;
+    height: 0.5rem;
+    margin: -1px;
+    border: 1px solid red;
+    border-radius: 16px;
+    border-color: transparent;
+    background-color: rgba(35, 35, 35, 1.0);
+}
