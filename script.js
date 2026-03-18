@@ -7,13 +7,16 @@ let currentTime = 0;      // remaining ms set by the user
 let endTime = 0;          // absolute timestamp (ms) when timer should end
 let rafId = null;         // requestAnimationFrame handle
 let isRunning = false;
+let totalDuration = 0;    // reference for progress bar
+const progressBarActive = document.querySelector('.timer-progress-bar-active');
 
 // --- Persistence ---
 function saveState() {
     localStorage.setItem('notionTimerState', JSON.stringify({
         currentTime,
         endTime,
-        isRunning
+        isRunning,
+        totalDuration
     }));
 }
 
@@ -25,6 +28,7 @@ function loadState() {
             currentTime = state.currentTime || 0;
             endTime = state.endTime || 0;
             isRunning = state.isRunning || false;
+            totalDuration = state.totalDuration || 0;
 
             if (isRunning) {
                 const remaining = endTime - Date.now();
@@ -104,6 +108,8 @@ function resetTimer() {
     isRunning = false;
     currentTime = 0;
     endTime = 0;
+    totalDuration = 0;
+    progressBarActive.style.width = '100%';
     timerDisplayText.textContent = '00:00';
     startBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
@@ -124,6 +130,7 @@ function startTimer() {
 
     // Calculate the absolute end timestamp
     endTime = Date.now() + currentTime;
+    totalDuration = currentTime; // Set baseline for progress bar
     isRunning = true;
 
     startBtn.classList.add('hidden');
@@ -154,6 +161,8 @@ pauseBtn.addEventListener('click', () => {
 });
 
 // Core countdown loop (timestamp-based)
+let lastSecond = -1;
+
 function runLoop() {
     rafId = requestAnimationFrame(() => {
         const remaining = endTime - Date.now();
@@ -169,6 +178,13 @@ function runLoop() {
         const secs = totalSecs % 60;
         timerDisplayText.textContent =
             `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+        // Update progress bar (only once per second for a 'ticking' wave feel)
+        if (totalSecs !== lastSecond) {
+            const progress = Math.min(100, Math.max(0, (remaining / totalDuration) * 100));
+            progressBarActive.style.width = `${progress}%`;
+            lastSecond = totalSecs;
+        }
 
         runLoop(); // schedule next frame
     });
@@ -187,6 +203,8 @@ function timeIsUp() {
     isRunning = false;
     currentTime = 0;
     endTime = 0;
+    totalDuration = 0;
+    progressBarActive.style.width = '0%';
     timerDisplayText.textContent = '00:00';
     startBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
@@ -208,6 +226,7 @@ addTimeBtn.addEventListener('click', () => {
     if (isRunning) {
         // Shift the end timestamp forward by 1 minute
         endTime += ONE_MINUTE;
+        totalDuration += ONE_MINUTE; // Increase total too to keep progress relative
     } else {
         // Cap at 59:59
         currentTime = Math.min(currentTime + ONE_MINUTE, 59 * 60000 + 59000);
@@ -222,6 +241,8 @@ removeTimeBtn.addEventListener('click', () => {
         const remaining = endTime - Date.now();
         if (remaining > ONE_MINUTE) {
             endTime -= ONE_MINUTE;
+            // Also reduce totalDuration but don't let it go below ONE_MINUTE or current remaining
+            totalDuration = Math.max(remaining - ONE_MINUTE, totalDuration - ONE_MINUTE);
         }
     } else {
         // Don't go below 0
