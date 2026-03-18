@@ -1,34 +1,34 @@
 :root {
-    /* Light Mode (Default) */
-    --bg-page: #f7f7f7;
-    --bg-container: #EBEBEB;
+    /* Light Mode (Notion Matching) */
+    --bg-page: #ffffff;
+    --bg-container: #f1f1ef; /* Notion Callout Gray */
     --bg-button-primary: #232323;
-    --text-button-primary: #EBEBEB;
+    --text-button-primary: #ffffff;
     --bg-button-secondary: #ffffff;
     --text-button-secondary: #333333;
     --text-main: #232323;
     --border-container: rgba(0, 0, 0, 0.05);
-    --progress-bg: rgba(35, 35, 35, 0.25);
-    --progress-active: rgba(35, 35, 35, 1.0);
-    --icon-color: rgba(35, 35, 35, 0.75);
-    --icon-hover: rgba(35, 35, 35, 1.0);
-    --bg-hover-secondary: rgba(35, 35, 35, 0.05);
+    --progress-bg: rgba(0, 0, 0, 0.1);
+    --progress-active: #232323;
+    --icon-color: rgba(0, 0, 0, 0.45);
+    --icon-hover: #232323;
+    --bg-hover-secondary: rgba(0, 0, 0, 0.05);
 }
 
 body.dark-mode {
-    /* Dark Mode */
+    /* Dark Mode (Notion Matching) */
     --bg-page: #191919;
-    --bg-container: #2F2F2F;
+    --bg-container: #262626; /* Notion Dark Secondary Background */
     --bg-button-primary: #ffffff;
-    --text-button-primary: #2F2F2F;
-    --bg-button-secondary: #3F3F3F;
+    --text-button-primary: #191919;
+    --bg-button-secondary: #373737;
     --text-button-secondary: #ffffff;
     --text-main: #ffffff;
     --border-container: rgba(255, 255, 255, 0.1);
     --progress-bg: rgba(255, 255, 255, 0.1);
     --progress-active: #ffffff;
-    --icon-color: rgba(255, 255, 255, 0.6);
-    --icon-hover: rgba(255, 255, 255, 1.0);
+    --icon-color: rgba(255, 255, 255, 0.45);
+    --icon-hover: #ffffff;
     --bg-hover-secondary: rgba(255, 255, 255, 0.1);
 }
 
